@@ -1,0 +1,18 @@
+{
+    "name": "uspdev/senhaunica",
+    "description": "Biblioteca para acesso à senha única",
+    "type": "library",
+    "license": "GPL-V2",
+    "authors": [
+        {
+            "name": "Masaki",
+            "email": "masaki.kawabata@gmail.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Uspdev\\Senhaunica\\": "src/"
+        }
+    }
+}
