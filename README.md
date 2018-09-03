@@ -1,8 +1,14 @@
-# senhaunica
+# Senhaunica
 Biblioteca genérica para integrar senha única em PHP
 
-# Uso
+## Instalação
 
+```
+composer require uspdev\senhaunica
+composer install
+```
+
+## Uso
 Deve-se criar uma rota (/loginusp por exemplo) com o seguinte código:
 ```
 require_once('../vendor/autoload.php');
