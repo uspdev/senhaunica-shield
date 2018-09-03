@@ -3,10 +3,23 @@ Biblioteca genérica para integrar senha única em PHP
 
 # Uso
 
-Deve-se criar uma rota (/loginusp por exemplo) onde vai se chamar:
+Deve-se criar uma rota (/loginusp por exemplo) com o seguinte código:
 ```
-$senhaunica = new Uspdev/Senhaunica('consumer_key','consumer_secret','callback_id',$amb); //$amb = 1; //teste; $amb = 2 //producao
-if ($login = $senhaunica->login()) {
-    header('Location:/alguma_rota');
-}
+require_once('../vendor/autoload.php');
+
+$auth = new Uspdev\Senhaunica\Senhaunica([
+    'consumer_key' => 'aaaa',
+    'consumer_secret' => 'sdkjfcsdkfhsdkfhsdkfhsdhkf',
+    'callback_id' => 1, // callback_id é o sequencial no servidor
+    'amb' => 1,// 1=teste, 2=producao
+]);
+
+$res = $auth->login();
+
+echo '<pre>';
+print_r($res);
+echo '</pre>';
+
+header('Location:/alguma_rota');
+
 ```
