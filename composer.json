@@ -9,7 +9,9 @@
             "email": "masaki.kawabata@gmail.com"
         }
     ],
-    "require": {},
+    "require": {
+        "zorrodg/oauth-php": "^0.1.0"
+    },
     "autoload": {
         "psr-4": {
             "Uspdev\\Senhaunica\\": "src/"
