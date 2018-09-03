@@ -1,8 +1,9 @@
 {
     "name": "uspdev/senhaunica",
     "description": "Biblioteca para acesso à senha única",
+    "homepage": "https://github.com/uspdev/senhaunica",
     "type": "library",
-    "license": "GPL-V2",
+    "license": "GPL-2.0-or-later",
     "authors": [
         {
             "name": "Masaki",
@@ -10,6 +11,7 @@
         }
     ],
     "require": {
+        "php": ">=5.5.9",
         "zorrodg/oauth-php": "^0.1.0"
     },
     "autoload": {
