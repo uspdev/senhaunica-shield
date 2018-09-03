@@ -16,6 +16,9 @@ composer install
 ```
 
 ## Uso
+
+O token pode ser usado para várias aplicações por meio do callback_id cadastrado em https://dev.uspdigital.usp.br/adminws/
+
 Deve-se criar uma rota (/loginusp por exemplo) com o seguinte código:
 
 ```php
