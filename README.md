@@ -3,7 +3,8 @@ Biblioteca genérica para integrar senha única em PHP
 
 ## Dependência
 
-biblioteca zorrodg/oauth-php
+biblioteca zorrodg/oauth-php  
+biblioteca ext-curl
 
 ## Instalação
 
