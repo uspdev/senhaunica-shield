@@ -12,7 +12,7 @@ Se seu projeto não usa composer ainda, é uma boa idéia começar a usá-lo.
 
 ```
 composer init
-composer require uspdev\senhaunica
+composer require uspdev/senhaunica
 composer install
 ```
 
