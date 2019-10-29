@@ -16,10 +16,13 @@ class Senhaunica
 
     public function __construct($oauth)
     {
-        if ($oauth['amb'] == 1) {
+        if ($oauth['amb'] == 1 || $oauth['amb'] == 'dev') {
             $oauth_host = "https://dev.uspdigital.usp.br"; // ambiente de teste
-        } else {
+        } elseif ($oauth['amb'] == 2 || $oauth['amb'] == 'prod') {
             $oauth_host = "https://uspdigital.usp.br"; // ambiente de producao
+        } else {
+            echo 'Ambiente não configurado!';
+            exit;
         }
 
         $this->user_data_url = $oauth_host . "/wsusuario/oauth/usuariousp";
