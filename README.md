@@ -29,7 +29,7 @@ $auth = new Uspdev\Senhaunica\Senhaunica([
     'consumer_key' => 'aaaa',
     'consumer_secret' => 'sdkjfcsdkfhsdkfhsdkfhsdhkf',
     'callback_id' => 1, // callback_id é o sequencial no servidor
-    'amb' => 1,// 1=teste, 2=producao
+    'amb' => 'dev',// 'dev' = teste, 'prod' = producao
 ]);
 
 $res = $auth->login();
@@ -41,3 +41,5 @@ echo '</pre>';
 header('Location:/alguma_rota');
 
 ```
+
+OBS: Anteriormente o ambiente era setado como 1=dev e 2=prod. Nas novas versões os números 1 e 2 serão descontinuados, premanecendo somente 'dev' e 'prod'.
