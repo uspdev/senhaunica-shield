@@ -23,7 +23,7 @@ O token pode ser usado para várias aplicações por meio do callback_id cadastr
 Deve-se criar uma rota (/loginusp por exemplo) com o seguinte código:
 
 ```php
-require_once('../vendor/autoload.php');
+require_once '../vendor/autoload.php';
 
 $auth = new Uspdev\Senhaunica\Senhaunica([
     'consumer_key' => 'aaaa',
