@@ -12,7 +12,10 @@ namespace Uspdev\Senhaunica;
 class Senhaunica
 {
 
-    protected $curl_options = array(CURLOPT_SSL_VERIFYPEER => false);
+    protected $curl_options = array(
+        CURLOPT_SSL_VERIFYPEER => false,
+        CURLOPT_HTTP_VERSION=>CURL_HTTP_VERSION_1_1
+    );
 
     public function __construct($oauth)
     {
