@@ -14,7 +14,7 @@ class Senhaunica
 
     protected $curl_options = array(
         CURLOPT_SSL_VERIFYPEER => false,
-        CURLOPT_HTTP_VERSION=>CURL_HTTP_VERSION_1_1
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1
     );
 
     public function __construct($oauth)
@@ -56,15 +56,32 @@ class Senhaunica
         } else {
             //  STEP 2:  Get an access token
             $this->getAccessToken();
-            return $this->getUserInfo();
+            $_SESSION['oauth_user'] = $this->getUserInfo();
+            return $_SESSION['oauth_user'];
         }
+    }
+
+    // retorna o primeiro vinculo que encontrar com o critério 'campo' == [valor1, ou valor2, ...]
+    public function obterVinculo($campo, $valores)
+    {
+        if (!is_array($valores)) {
+            $valores = [$valores];
+        }
+        foreach ($valores as $valor) {
+            foreach ($_SESSION['oauth_user']['vinculo'] as $v) {
+                if ($v[$campo] == $valor) {
+                    return $v;
+                }
+            }
+        }
+        return false;
     }
 
     protected function getOauthToken()
     {
         try {
             $tokenResultParams = \OAuth1\OAuthRequester::requestRequestToken($this->options['consumer_key'], null, null, 'POST', null, $this->curl_options);
-        } catch (OAuthException2 $e) {
+        } catch (\OAuth1\OAuthException2 $e) {
             echo "OAuthException in (fase 1) requestRequestToken:  " . $e->getMessage();
             var_dump($e);
             exit;
@@ -81,8 +98,7 @@ class Senhaunica
 
         try {
             \OAuth1\OAuthRequester::requestAccessToken($this->options['consumer_key'], $oauthToken, 0, 'POST', $_GET, $this->curl_options);
-
-        } catch (OAuthException2 $e) {
+        } catch (\OAuth1\OAuthException2 $e) {
             echo "OAuthException in (fase 2) requestAccessToken:  " . $e->getMessage();
             var_dump($e);
             // Something wrong with the oauth_token.
