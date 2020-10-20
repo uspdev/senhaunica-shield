@@ -40,7 +40,7 @@ class Senhaunica
         } else {
             // vamos avisar para usar variáveis de ambiente mas permite
             // continuar usando parametro no construtor
-            \trigger_error('Config por array esta obsoleto: use variaveis de ambiente.', E_USER_WARNING);
+            //\trigger_error('Config por array esta obsoleto: use variaveis de ambiente.', E_USER_WARNING);
 
             if ($oauth['amb'] == 1 || $oauth['amb'] == 'dev') {
                 $oauth_host = 'https://dev.uspdigital.usp.br'; // ambiente de teste
