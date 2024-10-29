@@ -1,13 +1,13 @@
 {
-    "name": "uspdev/senhaunica",
-    "description": "Biblioteca para acesso à senha única",
-    "homepage": "https://github.com/uspdev/senhaunica",
+    "name": "uspdev/senhaunica-ci4",
+    "description": "Biblioteca para acesso à senha única pelo CodeIgniter 4",
+    "homepage": "https://github.com/uspdev/senhaunica-ci4",
     "type": "library",
     "license": "GPL-2.0-or-later",
     "authors": [
         {
-            "name": "Masaki",
-            "email": "masaki.kawabata@gmail.com"
+            "name": "Daniel Picon",
+            "email": "dpicon@sc.usp.br"
         }
     ],
     "require": {
@@ -16,7 +16,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Uspdev\\Senhaunica\\": "src/"
+            "Uspdev\\SenhaunicaCI4\\": "src/"
         }
     }
 }

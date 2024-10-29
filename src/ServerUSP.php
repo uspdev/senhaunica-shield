@@ -1,6 +1,6 @@
 <?php
 
-namespace Uspdev\Senhaunica;
+namespace Uspdev\SenhaunicaCI4;
 
 use League\OAuth1\Client\Credentials\TemporaryCredentials;
 use League\OAuth1\Client\Credentials\TokenCredentials;
