@@ -1,76 +1,36 @@
-# Senhaunica
-Biblioteca genérica para integrar senha única em PHP
-
-## Changelog
-
-3/5/2023: versão 2.0
-* nova versão agora usa a biblioteca league/oauth1-client
-* compatível com php 8
-* Chamada agora é estática
+# Senhaunica-ci4
+Adaptação da Biblioteca genérica Senha Única para uso no CodeIgniter 4
 
 ## Dependência
 
 * biblioteca league/oauth1-client
 * PHP >=7.1 | >=8.0
+
 ## Instalação
 
-Se seu projeto não usa composer ainda, é uma boa idéia começar a usá-lo.
-
 ```
-composer require uspdev/senhaunica:2.0
+composer require uspdev/senhaunica-ci4
 ```
 
 ## Uso
 
-Esta biblioteca foi testada em debian 10 e ubuntu 22.04.
+Esta biblioteca foi testada no Ubuntu 22.04. 
 
-O token pode ser usado para várias aplicações por meio do callback_id cadastrado em https://uspdigital.usp.br/adminws/oauthConsumidorAcessar
+Ela é simplesmente uma adaptação da Biblioteca Senha Única, https://github.com/uspdev/senhaunica, que faz uso de Sessão PHP para armazenar os dados do usuário após login. A alteração foi feita para que todo o trabalho com Sessions sejam realizados com a Library Sessions do CodeIgniter 4. 
 
-Deve-se criar uma rota (/loginusp por exemplo) com o seguinte código:
+Os dados do usuário autenticado podem ser resgatados utilizando a chamada 
 
-```php
-require_once __DIR__.'/vendor/autoload.php';
-session_start();
-
-use Uspdev\Senhaunica\Senhaunica;
-
-$clientCredentials = [
-    'identifier' => 'identificacao',
-    'secret' => 'chave-secreta',
-    'callback_id' => 0,
-];
-
-Senhaunica::login($clientCredentials);
-
-header('Location:../');
-exit;
+```
+session()->get('oauth_user')
 ```
 
-Opcionalmente você pode passar os parâmetros via `env`:
+ou 
 
-```php
-require_once __DIR__.'/vendor/autoload.php';
-session_start();
-
-use Uspdev\Senhaunica\Senhaunica;
-
-putenv('SENHAUNICA_KEY=');
-putenv('SENHAUNICA_SECRET=');
-putenv('SENHAUNICA_CALLBACK_ID=');
-
-Senhaunica::login();
-
-header('Location:../');
-exit;
+```
+$user = Uspdev\SenhaunicaCI4\SenhaunicaCI4::getUserDetail();
 ```
 
-Os dados do usuário autenticado estarão em `$_SESSION['oauth_user']`
-
-Ele também pode ser recuperado usando
-
-    $user = Uspdev\Senhaunica\Senhaunica::getUserDetail();
-
-Ele contém um array com todos os dados retornados do oauth. Exemplo:
+Ambos retornam um array com todos os dados obtidos do oauth. Exemplo:
 
     [loginUsuario] => 111111
     [nomeUsuario] => Jose Maria da Silva
@@ -98,10 +58,43 @@ Ele contém um array com todos os dados retornados do oauth. Exemplo:
 
         )
 
-Adicionalmente, se você quiser validar o vínculo do login, use o código abaixo. Ele irá retornar o primeiro vínculo que encontrar dentro da lista fornecida. Ao invés de usar `tipoVinculo` você pode usar qualquer variável dentro do array de vínculos.
+
+As informações a seguir foram reescritas com base na biblioteca original, apenas alterando os dados pertinentes:
+
+O token pode ser usado para várias aplicações por meio do callback_id cadastrado em https://uspdigital.usp.br/adminws/oauthConsumidorAcessar
+
+Deve-se criar uma rota (/loginusp por exemplo) com o seguinte código:
 
 ```php
-$campo = 'tipoVinculo';
-$valores = ['SERVIDOR','OUTRO_VINCULO', '...'];
-$vinculo = Uspdev\Senhaunica\Senhaunica::obterVinculo($campo, $valores);
+require_once __DIR__.'/vendor/autoload.php';
+
+use Uspdev\SenhaunicaCI4\SenhaunicaCI4;
+
+$clientCredentials = [
+    'identifier' => 'identificacao',
+    'secret' => 'chave-secreta',
+    'callback_id' => 0,
+];
+
+SenhaunicaCI4::login($clientCredentials);
+
+header('Location:../');
+exit;
+```
+
+Opcionalmente você pode passar os parâmetros via `env`:
+
+```php
+require_once __DIR__.'/vendor/autoload.php';
+
+use Uspdev\SenhaunicaCI4\SenhaunicaCI4;
+
+putenv('SENHAUNICA_KEY=');
+putenv('SENHAUNICA_SECRET=');
+putenv('SENHAUNICA_CALLBACK_ID=');
+
+SenhaunicaCI4::login();
+
+header('Location:../');
+exit;
 ```
