@@ -4,7 +4,7 @@ Adaptação da Biblioteca genérica Senha Única para uso no CodeIgniter 4
 ## Dependência
 
 * biblioteca league/oauth1-client
-* PHP >=7.1 | >=8.0
+* PHP >=8.1
 
 ## Instalação
 
