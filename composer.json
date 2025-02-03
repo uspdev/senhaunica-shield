@@ -12,7 +12,8 @@
     ],
     "require": {
         "php": ">=8.1",
-        "league/oauth1-client": "^1.10"
+        "league/oauth1-client": "^1.10",
+        "codeigniter4/shield": "^1.1"
     },
     "autoload": {
         "psr-4": {
