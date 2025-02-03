@@ -1,11 +1,11 @@
 <?php
 
-namespace Uspdev\SenhaunicaCI4;
+namespace Uspdev\SenhaunicaShield;
 
-use Uspdev\SenhaunicaCI4\ServerUSP;
+use Uspdev\SenhaunicaShield\ServerUSP;
 use Config\Services;
 
-class SenhaunicaCI4
+class SenhaunicaShield
 {
     public static function login($clientCredentials = [])
     {
