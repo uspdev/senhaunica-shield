@@ -23,15 +23,16 @@ class SenhaunicaShield
         // step 3: tudo ok
         if ($session->has('token_credentials')) {
             $tokenCredentials = unserialize($session->get('token_credentials'));
-            $session->set('oauth_user', $server->getUserDetails($tokenCredentials));
-            return $session->get('oauth_user');
+            $userDetails = $server->getUserDetails($tokenCredentials);
+            Login::authenticate($userDetails);
+            return auth()->user();
         }
 
         // step 2: recebendo o retorno do oauth
         if (isset($_GET['oauth_token']) && isset($_GET['oauth_verifier'])) {
             $temporaryCredentials = unserialize($session->get('temporary_credentials'));
             $tokenCredentials = $server->getTokenCredentials($temporaryCredentials, $_GET['oauth_token'], $_GET['oauth_verifier']);
-            
+
             // Atualizando as credenciais de sessão
             $session->remove('temporary_credentials');
             $session->set('token_credentials', serialize($tokenCredentials));
@@ -46,7 +47,7 @@ class SenhaunicaShield
         $temporaryCredentials = $server->getTemporaryCredentials();
         $session->set('temporary_credentials', serialize($temporaryCredentials));
         $url = $server->getAuthorizationUrl($temporaryCredentials) . '&callback_id=' . $clientCredentials['callback_id'];
-        
+
         // Redirecionamento para o URL de autorização
         header('Location: ' . $url);
         exit;
