@@ -1,100 +1,66 @@
-# Senhaunica-ci4
-Adaptação da Biblioteca genérica Senha Única para uso no CodeIgniter 4
+# Senhaunica-shield
+Biblioteca para integração da senha única USP com o framework Codeigniter Shield
 
 ## Dependência
 
 * biblioteca league/oauth1-client
 * PHP >=8.1
+* codeigniter4/shield
 
-## Instalação
+## Instalação e configuração
 
 ```
-composer require uspdev/senhaunica-ci4
+composer require uspdev/senhaunica-shield
+```
+
+Após a instalação dos pacotes, é necessário configurar a conexão com a base de dados no arquivo .env. 
+
+```
+database.default.hostname = localhost
+database.default.database = senhaunica-shield
+database.default.username = root
+database.default.password = sua_senha_secreta
+database.default.DBDriver = MySQLi
+database.default.DBPrefix =
+database.default.port = 3306
+```
+
+Criar os arquivos de configuração e as tabelas do framework Shield com o comando
+
+```
+php spark shield:setup
+```
+
+A documentação para instalação e configuração completa do framework pode ser acessada no link https://shield.codeigniter.com/
+
+Após a configuração do Shield, é necessário cadastrar o token da aplicação  em https://uspdigital.usp.br/adminws/oauthConsumidorAcessar e inserir as configurações no .env
+
+```
+SENHAUNICA_KEY = iau
+SENHAUNICA_SECRET = sua_senha_secreta
+SENHAUNICA_CALLBACK_ID = 1
+```
+Criar o método e rota para callback e fazer a chamada da biblioteca para autentitcação
+
+```
+$routes->get('/loginusp', 'Login::loginusp');
+```
+
+```php
+public function loginusp()
+    {
+        SenhaunicaShield::login();
+        header('Location:../');
+        exit;
+    }
 ```
 
 ## Uso
 
-Esta biblioteca foi testada no Ubuntu 22.04. 
+Ao realizar a autenticação no servidor oAuth USP, a biblioteca verifica se já existe na tabela de usuários do Codeigniter Shield o número USP do usuário. Em caso afirmativo, faz o logon. Caso contrário, cria o usuário na tabela, atribui ao grupo default e, por fim, faz o logon. 
 
-Ela é simplesmente uma adaptação da Biblioteca Senha Única, https://github.com/uspdev/senhaunica, que faz uso de Sessão PHP para armazenar os dados do usuário após login. A alteração foi feita para que todo o trabalho com Sessions sejam realizados com a Library Sessions do CodeIgniter 4. 
+A proteção de rotas e o acesso aos dados do usuário podem ser consultados na documentação oficial do framework em https://shield.codeigniter.com/
 
-Os dados do usuário autenticado podem ser resgatados utilizando a chamada 
+## Observações
 
-```
-session()->get('oauth_user')
-```
-
-ou 
-
-```
-$user = Uspdev\SenhaunicaCI4\SenhaunicaCI4::getUserDetail();
-```
-
-Ambos retornam um array com todos os dados obtidos do oauth. Exemplo:
-
-    [loginUsuario] => 111111
-    [nomeUsuario] => Jose Maria da Silva
-    [tipoUsuario] => I
-    [emailPrincipalUsuario] => email@usp.br
-    [emailAlternativoUsuario] => email-alternativo@gmail.com
-    [emailUspUsuario] => outro-email@usp.br
-    [numeroTelefoneFormatado] => (0xx16)1234-5678 - ramal USP: 345678
-    [wsuserid] => Iasdkughacsdghçalekhagsghaegawe
-    [vinculo] => Array
-        (
-            [0] => Array
-                (
-                    [tipoVinculo] => SERVIDOR
-                    [codigoSetor] => 000
-                    [nomeAbreviadoSetor] => ABC
-                    [nomeSetor] => Meu setor
-                    [codigoUnidade] => 18
-                    [siglaUnidade] => EESC
-                    [nomeUnidade] => Escola de Engenharia de São Carlos
-                    [nomeVinculo] => Servidor
-                    [nomeAbreviadoFuncao] => Minha função
-                    [tipoFuncao] => Informática
-                )
-
-        )
-
-
-As informações a seguir foram reescritas com base na biblioteca original, apenas alterando os dados pertinentes:
-
-O token pode ser usado para várias aplicações por meio do callback_id cadastrado em https://uspdigital.usp.br/adminws/oauthConsumidorAcessar
-
-Deve-se criar uma rota (/loginusp por exemplo) com o seguinte código:
-
-```php
-require_once __DIR__.'/vendor/autoload.php';
-
-use Uspdev\SenhaunicaCI4\SenhaunicaCI4;
-
-$clientCredentials = [
-    'identifier' => 'identificacao',
-    'secret' => 'chave-secreta',
-    'callback_id' => 0,
-];
-
-SenhaunicaCI4::login($clientCredentials);
-
-header('Location:../');
-exit;
-```
-
-Opcionalmente você pode passar os parâmetros via `env`:
-
-```php
-require_once __DIR__.'/vendor/autoload.php';
-
-use Uspdev\SenhaunicaCI4\SenhaunicaCI4;
-
-putenv('SENHAUNICA_KEY=');
-putenv('SENHAUNICA_SECRET=');
-putenv('SENHAUNICA_CALLBACK_ID=');
-
-SenhaunicaCI4::login();
-
-header('Location:../');
-exit;
-```
+* O Codeigniter Shield, por padrão, fornece formulários para login, criação de novos usuários, login via magic-link. Para desabilitar essas e outras funções, ou customizar as views para uso, consultar a documentação oficial. 
