@@ -1,7 +1,7 @@
 {
-    "name": "uspdev/senhaunica-ci4",
-    "description": "Biblioteca para acesso à senha única pelo CodeIgniter 4",
-    "homepage": "https://github.com/uspdev/senhaunica-ci4",
+    "name": "uspdev/senhaunica-shield",
+    "description": "Biblioteca para integração da senha única USP com o framework Codeigniter Shield",
+    "homepage": "https://github.com/uspdev/senhaunica-shield",
     "type": "library",
     "license": "GPL-2.0-or-later",
     "authors": [
@@ -17,7 +17,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Uspdev\\SenhaunicaCI4\\": "src/"
+            "Uspdev\\SenhaunicaShield\\": "src/"
         }
     }
 }
