@@ -13,7 +13,7 @@ Biblioteca para integração da senha única USP com o framework Codeigniter Shi
 composer require uspdev/senhaunica-shield
 ```
 
-Após a instalação dos pacotes, é necessário configurar a conexão com a base de dados no arquivo .env. 
+O framework exige a utilização de banco de dados. Após a instalação dos pacotes, é necessário configurar a conexão com a base de dados no arquivo .env. 
 
 ```
 database.default.hostname = localhost
@@ -25,13 +25,19 @@ database.default.DBPrefix =
 database.default.port = 3306
 ```
 
-Criar os arquivos de configuração e as tabelas do framework Shield com o comando
+Criar os arquivos de configuração e as tabelas do banco de dados do framework Shield com o comando
 
 ```
 php spark shield:setup
 ```
 
 A documentação para instalação e configuração completa do framework pode ser acessada no link https://shield.codeigniter.com/
+
+Importante: verificar se a proteção csrf está configurada para session no arquivo `app/Config/Security.php`
+
+```
+public string $csrfProtection = 'session';
+```
 
 Após a configuração do Shield, é necessário cadastrar o token da aplicação  em https://uspdigital.usp.br/adminws/oauthConsumidorAcessar e inserir as configurações no .env
 
@@ -40,19 +46,39 @@ SENHAUNICA_KEY = iau
 SENHAUNICA_SECRET = sua_senha_secreta
 SENHAUNICA_CALLBACK_ID = 1
 ```
-Criar o método e rota para callback e fazer a chamada da biblioteca para autentitcação
+
+## Exemplo de uso
+
+Criar um controller e rota para login 
 
 ```
-$routes->get('/loginusp', 'Login::loginusp');
+php spark make:controller Login
 ```
+
+No arquivo `app\Controllers\Login.php`, criar o método loginusp
 
 ```php
-public function loginusp()
+<?php
+namespace App\Controllers;
+
+use App\Controllers\BaseController;
+use Uspdev\SenhaunicaShield\SenhaunicaShield;
+
+class Login extends BaseController
+{
+    public function loginusp()
     {
         SenhaunicaShield::login();
         header('Location:../');
         exit;
     }
+}
+```
+
+Criar a rota para o login e callback no arquivo app\Config\Routes.php
+
+```
+$routes->get('/loginusp', 'Login::loginusp');
 ```
 
 ## Uso
@@ -63,4 +89,93 @@ A proteção de rotas e o acesso aos dados do usuário podem ser consultados na 
 
 ## Observações
 
-* O Codeigniter Shield, por padrão, fornece formulários para login, criação de novos usuários, login via magic-link. Para desabilitar essas e outras funções, ou customizar as views para uso, consultar a documentação oficial. 
+* O Codeigniter Shield, por padrão, fornece formulários para login, criação de novos usuários, login via magic-link. Para desabilitar essas e outras funções, ou customizar as views para uso, consultar a documentação oficial.
+
+# Guia rápido de métodos do CodeIgniter Shield
+
+| Método | Descrição | Como Usar |
+|--------|-----------|----------|
+| `auth()->attempt($credentials)` | Tenta autenticar um usuário com credenciais fornecidas. | ```php auth()->attempt(['email' => 'user@example.com', 'password' => 'senha123']); ``` |
+| `auth()->login($user)` | Faz login de um usuário específico. | ```php $user = model(UserModel::class)->find(1); auth()->login($user); ``` |
+| `auth()->logout()` | Encerra a sessão do usuário autenticado. | ```php auth()->logout(); ``` |
+| `auth()->user()` | Obtém o usuário autenticado. Retorna `null` se não houver um usuário logado. | ```php $user = auth()->user(); echo $user->email; ``` |
+| `auth()->loggedIn()` | Verifica se há um usuário autenticado. | ```php if (auth()->loggedIn()) { echo "Usuário autenticado"; } ``` |
+| `auth()->id()` | Retorna o ID do usuário autenticado. | ```php $userId = auth()->id(); ``` |
+| `auth()->register($credentials, $activate = false)` | Registra um novo usuário. O segundo parâmetro define se a conta será ativada automaticamente. | ```php auth()->register(['email' => 'newuser@example.com', 'password' => 'senha123'], true); ``` |
+| `auth()->forgotPassword($email)` | Inicia o processo de redefinição de senha. | ```php auth()->forgotPassword('user@example.com'); ``` |
+| `auth()->resetPassword($token, $newPassword)` | Redefine a senha de um usuário com um token de recuperação. | ```php auth()->resetPassword($token, 'novaSenha123'); ``` |
+| `auth()->activate($user)` | Ativa manualmente um usuário. | ```php $user = model(UserModel::class)->find(1); auth()->activate($user); ``` |
+| `auth()->throttle()->check($ipAddress, $identifier)` | Verifica se um usuário excedeu as tentativas de login permitidas. | ```php if (auth()->throttle()->check($ip, $email)) { echo "Muitas tentativas de login!"; } ``` |
+
+- Para mais detalhes, consultar a [documentação oficial](https://github.com/codeigniter4/shield).
+
+# Controle de Rotas com CodeIgniter Shield
+
+O **CodeIgniter Shield** fornece filtros para controlar o acesso às rotas com base na sessão do usuário, permissões e grupos.  
+Este guia explica resume como configurar e aplicar esses filtros.
+
+---
+
+## 1. Configuração do Arquivo `Filters.php`
+
+Para utilizar os filtros de autenticação do Shield, é necessário adicioná-los ao arquivo de configuração de filtros localizado em:
+
+`app/Config/Filters.php`
+
+### Exemplo de Configuração:
+
+Abra `app/Config/Filters.php` e adicione os filtros do **Shield**:
+
+```php
+namespace Config;
+
+use CodeIgniter\Config\BaseConfig;
+
+class Filters extends BaseConfig
+{
+    public array $aliases = [
+        ...
+        'session'    => \CodeIgniter\Shield\Filters\SessionAuth::class, // Verifica se o usuário está autenticado
+        'group'      => \CodeIgniter\Shield\Filters\GroupFilter::class, // Restringe acesso por grupo
+        'permission' => \CodeIgniter\Shield\Filters\PermissionFilter::class, // Restringe acesso por permissão
+    ];
+
+    ...
+}
+```
+
+## 2. Protegendo Rotas no Arquivo Routes.php
+
+No arquivo `app/Config/Routes.php`, podemos aplicar os filtros nas rotas.
+
+### Protegendo Rotas com session
+
+```php
+$routes->group('dashboard', ['filter' => 'session'], function ($routes) {
+    $routes->get('/', 'DashboardController::index');
+});
+```
+Usuários não autenticados serão redirecionados para a tela de login.
+
+### Protegendo Rotas com session
+
+```php
+$routes->group('admin', ['filter' => 'group:admin'], function ($routes) {
+    $routes->get('/', 'AdminController::index');
+    $routes->get('users', 'AdminController::users');
+});
+```
+Apenas usuários que pertencem ao grupo admin terão acesso
+
+### Protegendo Rotas com session
+
+```php
+$routes->group('reports', ['filter' => 'permission:view-reports'], function ($routes) {
+    $routes->get('/', 'ReportsController::index');
+});
+```
+Apenas usuários com a permissão view-reports poderão acessar
+
+
+
+
