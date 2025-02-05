@@ -32,6 +32,11 @@ class SenhaunicaShield
 
             // step 2: recebendo o retorno do oauth
             if (isset($_GET['oauth_token']) && isset($_GET['oauth_verifier'])) {
+                // Previne erro de item de sessão nulo, recriando caso não encontrado
+                if (!$session->has('temporary_credentials')) {
+                    header('Location: ' . $_SERVER['PHP_SELF']);
+                    exit;
+                }
                 $temporaryCredentials = unserialize($session->get('temporary_credentials'));
                 $tokenCredentials = $server->getTokenCredentials($temporaryCredentials, $_GET['oauth_token'], $_GET['oauth_verifier']);
 
