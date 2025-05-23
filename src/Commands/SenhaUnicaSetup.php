@@ -4,7 +4,7 @@ namespace Uspdev\SenhaunicaShield\Commands;
 use CodeIgniter\CLI\BaseCommand;
 use CodeIgniter\CLI\CLI;
 
-class InstitucionalSetup extends BaseCommand
+class SenhaUnicaSetup extends BaseCommand
 {
     protected $group       = 'Shield';
     protected $name        = 'auth:senhaunica-setup';
