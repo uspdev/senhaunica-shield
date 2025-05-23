@@ -22,7 +22,6 @@ class AddNameToUsers extends Migration
             'fullname' => ['type' => 'VARCHAR', 'constraint' => '255', 'null' => true],
         ];
         $this->forge->addColumn($this->tables['users'], $fields);
-        $this->forge->addColumn();
     }
 
     public function down()
