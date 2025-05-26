@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Models;
+namespace Uspdev\SenhaunicaShield\Models;
 
 use CodeIgniter\Shield\Models\UserModel as ShieldUserModel;
 
@@ -14,7 +14,6 @@ class UserModel extends ShieldUserModel
 
         $this->allowedFields = [
             ...$this->allowedFields,
-
             'fullname',
         ];
     }
