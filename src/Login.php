@@ -19,6 +19,7 @@ class Login
             $user = new User([
                 'username' => $userDetails['loginUsuario'],
                 'email'    => $userDetails['emailPrincipalUsuario'],
+                'fullname'    => $userDetails['nomeUsuario'],
             ]);
             $users->save($user);
 
