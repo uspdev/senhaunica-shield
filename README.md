@@ -39,6 +39,12 @@ Importante: verificar se a proteção csrf está configurada para session no arq
 public string $csrfProtection = 'session';
 ```
 
+Em seguida, executar o comando para adicionar o campo fullname na tabela users e rota para login USP. 
+
+```
+php spark auth:senhaunica-setup
+```
+
 Após a configuração do Shield, é necessário cadastrar o token da aplicação  em https://uspdigital.usp.br/adminws/oauthConsumidorAcessar e inserir as configurações no .env
 
 ```
@@ -47,49 +53,40 @@ SENHAUNICA_SECRET = sua_senha_secreta
 SENHAUNICA_CALLBACK_ID = 1
 ```
 
-## Exemplo de uso
-
-Criar um controller e rota para login 
+Também no .env, configurar a linguagem do sistema e apontar para os models e views customizados da biblioteca
 
 ```
-php spark make:controller Login
+# Linguagem
+app.defaultLocale = pt-BR
+
+## Shield configurações
+auth.views.register = \Uspdev\SenhaunicaShield\Views\register
+auth.views.login = \Uspdev\SenhaunicaShield\Views\login
+auth.userProvider = \Uspdev\SenhaunicaShield\Models\UserModel
+auth.allowRegistration = true
 ```
 
-No arquivo `app\Controllers\Login.php`, criar o método loginusp
+Caso deseje customizar as Views, alterar esses campos. Lembre-se de utilizar o formulário da biblioteca como modelo para não esquecer dos campos da tabela. 
 
-```php
-<?php
-namespace App\Controllers;
+O Shield permite habilitar ou não novos registros, login por URL, etc. Verificar na documentação. 
 
-use App\Controllers\BaseController;
-use Uspdev\SenhaunicaShield\SenhaunicaShield;
-
-class Login extends BaseController
-{
-    public function loginusp()
-    {
-        SenhaunicaShield::login();
-        header('Location:../');
-        exit;
-    }
-}
-```
-
-Criar a rota para o login e callback no arquivo app\Config\Routes.php
-
-```
-$routes->get('/loginusp', 'Login::loginusp');
-```
-
-## Uso
+## Workflow
 
 Ao realizar a autenticação no servidor oAuth USP, a biblioteca verifica se já existe na tabela de usuários do Codeigniter Shield o número USP do usuário. Em caso afirmativo, faz o logon. Caso contrário, cria o usuário na tabela, atribui ao grupo default e, por fim, faz o logon. 
 
 A proteção de rotas e o acesso aos dados do usuário podem ser consultados na documentação oficial do framework em https://shield.codeigniter.com/
 
-## Observações
+## Exemplo de uso
 
-* O Codeigniter Shield, por padrão, fornece formulários para login, criação de novos usuários, login via magic-link. Para desabilitar essas e outras funções, ou customizar as views para uso, consultar a documentação oficial.
+Após configuração, as seguintes rotas estarão disponíveis:
+
+| URI | Descrição | OBS |
+|--------|-----------|----------|
+| /login | Formulário de Login com botão para login USP | - |
+| /loginusp | Redireciona para o sistema de login USP | Lembrar de configurar o token de autenticação |
+| /register | Exibe formulário para cadastro de usuário | Pode ser desabilitado no .env com auth.allowRegistration = false |
+| /logout | Faz o logout do usuário | - |
+
 
 # Guia rápido de métodos do CodeIgniter Shield
 
