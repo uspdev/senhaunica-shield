@@ -53,7 +53,7 @@ SENHAUNICA_SECRET = sua_senha_secreta
 SENHAUNICA_CALLBACK_ID = 1
 ```
 
-Também no .env, configurar a linguagem do sistema e apontar para os models e views customizados da biblioteca
+Também no .env, configurar a linguagem do sistema, apontar para os models e views customizados da biblioteca e inserir superadmins, se necessário (nº USP separados por vírgula)
 
 ```
 # Linguagem
@@ -64,6 +64,7 @@ auth.views.register = \Uspdev\SenhaunicaShield\Views\register
 auth.views.login = \Uspdev\SenhaunicaShield\Views\login
 auth.userProvider = \Uspdev\SenhaunicaShield\Models\UserModel
 auth.allowRegistration = true
+auth.superadmin=111111,222222
 ```
 
 Caso deseje customizar as Views, alterar esses campos. Lembre-se de utilizar o formulário da biblioteca como modelo para não esquecer dos campos da tabela. 
