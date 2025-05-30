@@ -8,53 +8,81 @@ class Login
 {
     public static function authenticate($userDetails)
     {
-        // Cria instância do provider (usuários)
         $users = auth()->getProvider();
-
-        // Busca o usuário existente pelo login
         $user = $users->findByCredentials(['username' => $userDetails['loginUsuario']]);
 
-        // Se o usuário não existir, registra
         if (!$user) {
-            $user = new User([
-                'username' => $userDetails['loginUsuario'],
-                'email'    => $userDetails['emailPrincipalUsuario'],
-                'fullname' => $userDetails['nomeUsuario'],
-            ]);
-            $users->save($user);
-
-            // Busca o usuário recém-criado
-            $user = $users->findById($users->getInsertID());
-
-            // Verifica se está na lista de superadmins do .env
-            $superadmins = explode(',', getenv('auth.superadmin') ?? '');
-            $superadmins = array_map('trim', $superadmins);
-
-            if (in_array($userDetails['loginUsuario'], $superadmins)) {
-                $user->addGroup('superadmin');
-            } else {
-                $users->addToDefaultGroup($user);
-            }
+            $user = self::registerUser($users, $userDetails);
+            self::assignGroup($users, $user, $userDetails['loginUsuario']);
         } else {
-            // Atualiza email e nome completo se estiverem diferentes
-            $updated = false;
+            $user = self::updateUserIfNeeded($users, $user, $userDetails);
+        }
 
-            if (empty($user->email) || $user->email !== $userDetails['emailPrincipalUsuario']) {
-                $user->email = $userDetails['emailPrincipalUsuario'];
+        auth()->login($user);
+    }
+
+    private static function registerUser($users, $details)
+    {
+        $user = new User([
+            'username' => $details['loginUsuario'],
+            'email'    => $details['emailPrincipalUsuario'],
+            'fullname' => $details['nomeUsuario'],
+            'tipoVinculo' => $details['vinculo'][0]['tipoVinculo'],
+            'codigoSetor' => $details['vinculo'][0]['codigoSetor'],
+            'nomeAbreviadoSetor' => $details['vinculo'][0]['nomeAbreviadoSetor'],
+            'nomeSetor' => $details['vinculo'][0]['nomeSetor'],
+            'codigoUnidade' => $details['vinculo'][0]['codigoUnidade'],
+            'siglaUnidade' => $details['vinculo'][0]['siglaUnidade'],
+            'nomeUnidade' => $details['vinculo'][0]['nomeUnidade'],
+            'nomeVinculo' => $details['vinculo'][0]['nomeVinculo'],
+            'nomeAbreviadoFuncao' => $details['vinculo'][0]['nomeAbreviadoFuncao'],
+            'tipoFuncao' => $details['vinculo'][0]['tipoFuncao'],
+        ]);
+
+        $users->save($user);
+        return $users->findById($users->getInsertID());
+    }
+
+    private static function assignGroup($users, $user, $username)
+    {
+        $superadmins = array_map('trim', explode(',', getenv('auth.superadmin') ?? ''));
+        if (in_array($username, $superadmins)) {
+            $user->addGroup('superadmin');
+        } else {
+            $users->addToDefaultGroup($user);
+        }
+    }
+
+    private static function updateUserIfNeeded($users, $user, $details)
+    {
+        $updated = false;
+
+        $map = [
+            'email' => $details['emailPrincipalUsuario'],
+            'fullname' => $details['nomeUsuario'],
+            'tipoVinculo' => $details['vinculo'][0]['tipoVinculo'],
+            'codigoSetor' => $details['vinculo'][0]['codigoSetor'],
+            'nomeAbreviadoSetor' => $details['vinculo'][0]['nomeAbreviadoSetor'],
+            'nomeSetor' => $details['vinculo'][0]['nomeSetor'],
+            'codigoUnidade' => $details['vinculo'][0]['codigoUnidade'],
+            'siglaUnidade' => $details['vinculo'][0]['siglaUnidade'],
+            'nomeUnidade' => $details['vinculo'][0]['nomeUnidade'],
+            'nomeVinculo' => $details['vinculo'][0]['nomeVinculo'],
+            'nomeAbreviadoFuncao' => $details['vinculo'][0]['nomeAbreviadoFuncao'],
+            'tipoFuncao' => $details['vinculo'][0]['tipoFuncao'],
+        ];
+
+        foreach ($map as $field => $value) {
+            if (empty($user->$field) || $user->$field !== $value) {
+                $user->$field = $value;
                 $updated = true;
-            }
-
-            if (empty($user->fullname) || $user->fullname !== $userDetails['nomeUsuario']) {
-                $user->fullname = $userDetails['nomeUsuario'];
-                $updated = true;
-            }
-
-            if ($updated) {
-                $users->save($user);
             }
         }
 
-        // Realiza o login
-        auth()->login($user);
+        if ($updated) {
+            $users->save($user);
+        }
+
+        return $user;
     }
 }
