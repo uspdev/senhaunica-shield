@@ -1,6 +1,6 @@
 <?php
 
-namespace Uspdev\SenhaunicaShield\Resources\Migrations;
+namespace Uspdev\SenhaunicaShield\Database\Migrations;
 
 use CodeIgniter\Database\Forge;
 use CodeIgniter\Database\Migration;
