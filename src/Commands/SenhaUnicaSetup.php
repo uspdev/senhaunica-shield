@@ -21,7 +21,7 @@ class SenhaUnicaSetup extends BaseCommand
         }
 
         CLI::write("Migrate senha única USP...");
-        service('commands')->run(['all' => null]);
+        service('commands')->run('migrate', ['all' => null]);
 
         CLI::write("Configurando rota para loginusp...");
         $this->setupRoutes();
