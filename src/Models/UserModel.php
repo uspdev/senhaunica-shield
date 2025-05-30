@@ -15,6 +15,16 @@ class UserModel extends ShieldUserModel
         $this->allowedFields = [
             ...$this->allowedFields,
             'fullname',
+            'tipoVinculo',
+            'codigoSetor',
+            'nomeAbreviadoSetor',
+            'nomeSetor',
+            'codigoUnidade',
+            'siglaUnidade',
+            'nomeUnidade',
+            'nomeVinculo',
+            'nomeAbreviadoFuncao',
+            'tipoFuncao',
         ];
     }
 }
