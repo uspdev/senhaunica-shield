@@ -26,8 +26,7 @@ class SenhaunicaShield
             if ($session->has('token_credentials')) {
                 $tokenCredentials = unserialize($session->get('token_credentials'));
                 $userDetails = $server->getUserDetails($tokenCredentials);
-                Login::authenticate($userDetails);
-                return auth()->user();
+                return Login::authenticate($userDetails);
             }
 
             // step 2: recebendo o retorno do oauth

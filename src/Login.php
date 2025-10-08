@@ -10,15 +10,21 @@ class Login
     {
         $users = auth()->getProvider();
         $user = $users->findByCredentials(['username' => $userDetails['loginUsuario']]);
+        $authConfig = config('Auth');
 
         if (!$user) {
-            $user = self::registerUser($users, $userDetails);
-            self::assignGroup($users, $user, $userDetails['loginUsuario']);
+            if ($authConfig->allowRegistration) {
+                $user = self::registerUser($users, $userDetails);
+                self::assignGroup($users, $user, $userDetails['loginUsuario']);
+            } else {
+                return false;
+            }
         } else {
             $user = self::updateUserIfNeeded($users, $user, $userDetails);
         }
 
         auth()->login($user);
+        return true;
     }
 
     private static function registerUser($users, $details)

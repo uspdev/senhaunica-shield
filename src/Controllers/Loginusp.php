@@ -16,8 +16,10 @@ class Loginusp extends BaseController
             return redirect()->to('login')->with('error', 'Falta configurar as credenciais para a conexão com o auth USP');
         }
 
-        SenhaunicaShield::login();
-        header('Location:../');
-        exit;
+        if (SenhaunicaShield::login()){
+            return redirect()->to('/');
+        } else {
+            return redirect()->to('login')->with('error', 'Usuário não encontrado');
+        }
     }
 }
