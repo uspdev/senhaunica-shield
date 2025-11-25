@@ -33,6 +33,8 @@ class Login
             'username' => $details['loginUsuario'],
             'email'    => $details['emailPrincipalUsuario'],
             'fullname' => $details['nomeUsuario'],
+            'tipoUser' => 'USP',
+            'observacao' => 'Registrado via uso de senha única USP',
             'vinculos' => json_encode($details['vinculo'])
         ]);
 
