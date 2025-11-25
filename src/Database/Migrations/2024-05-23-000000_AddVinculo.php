@@ -19,10 +19,16 @@ class AddVinculo extends Migration
     public function up()
     {
         $fields = [
-             'vinculos' => [
-                'type'       => 'TEXT',
-                'null'       => true,
-            ]
+            'tipoVinculo' => ['type' => 'VARCHAR', 'constraint' => '255', 'null' => true],
+            'codigoSetor' => ['type' => 'VARCHAR', 'constraint' => '255', 'null' => true],
+            'nomeAbreviadoSetor' => ['type' => 'VARCHAR', 'constraint' => '255', 'null' => true],
+            'nomeSetor' => ['type' => 'VARCHAR', 'constraint' => '255', 'null' => true],
+            'codigoUnidade' => ['type' => 'VARCHAR', 'constraint' => '255', 'null' => true],
+            'siglaUnidade' => ['type' => 'VARCHAR', 'constraint' => '255', 'null' => true],
+            'nomeUnidade' => ['type' => 'VARCHAR', 'constraint' => '255', 'null' => true],
+            'nomeVinculo' => ['type' => 'VARCHAR', 'constraint' => '255', 'null' => true],
+            'nomeAbreviadoFuncao' => ['type' => 'VARCHAR', 'constraint' => '255', 'null' => true],
+            'tipoFuncao' => ['type' => 'VARCHAR', 'constraint' => '255', 'null' => true],
         ];
         $this->forge->addColumn($this->tables['users'], $fields);
     }
@@ -30,7 +36,16 @@ class AddVinculo extends Migration
     public function down()
     {
         $fields = [
-            'vinculos',
+            'tipoVinculo',
+            'codigoSetor',
+            'nomeAbreviadoSetor',
+            'nomeSetor',
+            'codigoUnidade',
+            'siglaUnidade',
+            'nomeUnidade',
+            'nomeVinculo',
+            'nomeAbreviadoFuncao',
+            'tipoFuncao',
         ];
         $this->forge->dropColumn($this->tables['users'], $fields);
     }
