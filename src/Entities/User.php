@@ -34,8 +34,41 @@ class User extends ShieldUser
         }
 
         $tipos = array_column($vinculos, 'tipoVinculo');
+        $vinculoLower = mb_strtolower($vinculo);
 
-        return in_array($vinculo, $tipos, true);
+        foreach ($tipos as $tipo) {
+            if (mb_strtolower((string)$tipo) === $vinculoLower) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Verifica se o usuário faz parte de determinada unidade (por sigla).
+     *
+     * @param string $unidade
+     * @return bool
+     */
+    public function hasUnidade(string $unidade): bool
+    {
+        $vinculos = json_decode($this->attributes['vinculos'] ?? '[]', true);
+
+        if (!is_array($vinculos)) {
+            return false;
+        }
+
+        $unidades = array_column($vinculos, 'siglaUnidade');
+        $unidadeLower = mb_strtolower($unidade);
+
+        foreach ($unidades as $sigla) {
+            if (mb_strtolower((string)$sigla) === $unidadeLower) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -49,4 +82,6 @@ class User extends ShieldUser
 
         return is_array($vinculos) ? array_column($vinculos, 'tipoVinculo') : [];
     }
+
+
 }
