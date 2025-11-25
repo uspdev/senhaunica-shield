@@ -33,16 +33,7 @@ class Login
             'username' => $details['loginUsuario'],
             'email'    => $details['emailPrincipalUsuario'],
             'fullname' => $details['nomeUsuario'],
-            'tipoVinculo' => $details['vinculo'][0]['tipoVinculo'],
-            'codigoSetor' => $details['vinculo'][0]['codigoSetor'],
-            'nomeAbreviadoSetor' => $details['vinculo'][0]['nomeAbreviadoSetor'],
-            'nomeSetor' => $details['vinculo'][0]['nomeSetor'],
-            'codigoUnidade' => $details['vinculo'][0]['codigoUnidade'],
-            'siglaUnidade' => $details['vinculo'][0]['siglaUnidade'],
-            'nomeUnidade' => $details['vinculo'][0]['nomeUnidade'],
-            'nomeVinculo' => $details['vinculo'][0]['nomeVinculo'],
-            'nomeAbreviadoFuncao' => $details['vinculo'][0]['nomeAbreviadoFuncao'],
-            'tipoFuncao' => $details['vinculo'][0]['tipoFuncao'],
+            'vinculos' => json_encode($details['vinculo'])
         ]);
 
         $users->save($user);
@@ -66,16 +57,7 @@ class Login
         $map = [
             'email' => $details['emailPrincipalUsuario'],
             'fullname' => $details['nomeUsuario'],
-            'tipoVinculo' => $details['vinculo'][0]['tipoVinculo'],
-            'codigoSetor' => $details['vinculo'][0]['codigoSetor'],
-            'nomeAbreviadoSetor' => $details['vinculo'][0]['nomeAbreviadoSetor'],
-            'nomeSetor' => $details['vinculo'][0]['nomeSetor'],
-            'codigoUnidade' => $details['vinculo'][0]['codigoUnidade'],
-            'siglaUnidade' => $details['vinculo'][0]['siglaUnidade'],
-            'nomeUnidade' => $details['vinculo'][0]['nomeUnidade'],
-            'nomeVinculo' => $details['vinculo'][0]['nomeVinculo'],
-            'nomeAbreviadoFuncao' => $details['vinculo'][0]['nomeAbreviadoFuncao'],
-            'tipoFuncao' => $details['vinculo'][0]['tipoFuncao'],
+            'vinculos' => json_encode($details['vinculo'])
         ];
 
         foreach ($map as $field => $value) {
