@@ -122,6 +122,14 @@ hasUnidadeCodigo($unidade) | int $unidade | bool | Verifica se o usuário perten
 php spark migrate --all
 ```
 
+## Atualização para 2.0.0
+
+Para atualizar o pacote:
+```bash
+composer update uspdev/senhaunica-shield
+php spark migrate --all
+```
+
 ## Workflow
 
 Ao realizar a autenticação no servidor oAuth USP, a biblioteca verifica se já existe na tabela de usuários do Codeigniter Shield o número USP do usuário. Em caso afirmativo, faz o logon. Caso contrário, cria o usuário na tabela, atribui ao grupo default e, por fim, faz o logon. 
