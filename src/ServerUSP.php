@@ -21,7 +21,7 @@ class ServerUSP extends Server
      */
     public function urlTemporaryCredentials()
     {
-        return 'https://uspdigital.usp.br/wsusuario/oauth/request_token';
+        return  $this->getBaseUrl() . '/request_token';
     }
 
     /**
@@ -29,7 +29,7 @@ class ServerUSP extends Server
      */
     public function urlAuthorization()
     {
-        return 'https://uspdigital.usp.br/wsusuario/oauth/authorize';
+        return $this->getBaseUrl() . '/authorize';
     }
 
     /**
@@ -37,7 +37,7 @@ class ServerUSP extends Server
      */
     public function urlTokenCredentials()
     {
-        return 'https://uspdigital.usp.br/wsusuario/oauth/access_token';
+        return $this->getBaseUrl() . '/access_token';
     }
 
     /**
@@ -45,7 +45,7 @@ class ServerUSP extends Server
      */
     public function urlUserDetails()
     {
-        return 'https://uspdigital.usp.br/wsusuario/oauth/usuariousp';
+        return $this->getBaseUrl() . '/usuariousp';
     }
 
     /**
@@ -136,7 +136,6 @@ class ServerUSP extends Server
         }
 
         return $this->createTokenCredentials((string) $response->getBody());
-
     }
 
     // change request from 'get' to 'post'
@@ -180,5 +179,15 @@ class ServerUSP extends Server
         }
 
         return $this->cachedUserDetailsResponse;
+    }
+
+    /**
+     * Permite configuração da URL para utilizar servidores de teste do senha única
+     * como senhaunica-faker
+     */
+    protected function getBaseUrl(): string
+    {
+        return env('SENHAUNICA_DEV')
+            ?? 'https://uspdigital.usp.br/wsusuario/oauth';
     }
 }
