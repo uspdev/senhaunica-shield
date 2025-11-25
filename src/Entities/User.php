@@ -36,7 +36,7 @@ class User extends ShieldUser
      *
      * @return array
      */
-    public function getCodigoSetor(): array
+    public function getCodigosSetores(): array
     {
         $vinculos = json_decode($this->attributes['vinculos'] ?? '[]', true);
 
@@ -48,7 +48,7 @@ class User extends ShieldUser
      *
      * @return array
      */
-    public function getNomeAbreviadoSetor(): array
+    public function getNomesAbreviadosSetores(): array
     {
         $vinculos = json_decode($this->attributes['vinculos'] ?? '[]', true);
 
@@ -60,7 +60,7 @@ class User extends ShieldUser
      *
      * @return array
      */
-    public function getNomeSetor(): array
+    public function getNomeSetores(): array
     {
         $vinculos = json_decode($this->attributes['vinculos'] ?? '[]', true);
 
