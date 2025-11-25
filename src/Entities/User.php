@@ -9,6 +9,17 @@ use CodeIgniter\Shield\Entities\User as ShieldUser;
 class User extends ShieldUser
 {
     /**
+     * Retorna vínculos do usuário em formato de array
+     * 
+     * @return array
+     */
+    public function getVinculos(): array
+    {
+        $vinculos = json_decode($this->attributes['vinculos'] ?? '[]', true);
+        return is_array($vinculos) ? $vinculos : [];
+    }
+
+    /**
      * Verifica se o usuário possui determinado vínculo.
      *
      * @param string $vinculo
