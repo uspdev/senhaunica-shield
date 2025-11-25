@@ -20,6 +20,104 @@ class User extends ShieldUser
     }
 
     /**
+     * Retorna todos os vínculos como array simples.
+     *
+     * @return array
+     */
+    public function getTiposVinculo(): array
+    {
+        $vinculos = json_decode($this->attributes['vinculos'] ?? '[]', true);
+
+        return is_array($vinculos) ? array_column($vinculos, 'tipoVinculo') : [];
+    }
+
+    /**
+     * Retorna todos os Códigos de Setor como array simples.
+     *
+     * @return array
+     */
+    public function getCodigoSetor(): array
+    {
+        $vinculos = json_decode($this->attributes['vinculos'] ?? '[]', true);
+
+        return is_array($vinculos) ? array_column($vinculos, 'codigoSetor') : [];
+    }
+
+    /**
+     * Retorna todos os Nomes Abreviados de Setor como array simples.
+     *
+     * @return array
+     */
+    public function getNomeAbreviadoSetor(): array
+    {
+        $vinculos = json_decode($this->attributes['vinculos'] ?? '[]', true);
+
+        return is_array($vinculos) ? array_column($vinculos, 'nomeAbreviadoSetor') : [];
+    }
+
+    /**
+     * Retorna todos os Nomes de Setor como array simples.
+     *
+     * @return array
+     */
+    public function getNomeSetor(): array
+    {
+        $vinculos = json_decode($this->attributes['vinculos'] ?? '[]', true);
+
+        return is_array($vinculos) ? array_column($vinculos, 'nomeSetor') : [];
+    }
+
+    /**
+     * Retorna todas os códigos das unidades como array simples.
+     *
+     * @return array
+     */
+    public function getUnidadesCodigos(): array
+    {
+        $vinculos = json_decode($this->attributes['vinculos'] ?? '[]', true);
+
+        return is_array($vinculos) ? array_column($vinculos, 'codigoUnidade') : [];
+    }
+    
+    /**
+     * Retorna todas as siglas das unidades como array simples.
+     *
+     * @return array
+     */
+    public function getUnidadesSiglas(): array
+    {
+        $vinculos = json_decode($this->attributes['vinculos'] ?? '[]', true);
+
+        return is_array($vinculos) ? array_column($vinculos, 'siglaUnidade') : [];
+    }
+
+
+    /**
+     * Retorna todos os nomes das unidades como array simples.
+     *
+     * @return array
+     */
+    public function getUnidadesNomes(): array
+    {
+        $vinculos = json_decode($this->attributes['vinculos'] ?? '[]', true);
+
+        return is_array($vinculos) ? array_column($vinculos, 'nomeUnidade') : [];
+    }
+
+    /**
+     * Retorna todos os nomes dos vínculos como array simples.
+     *
+     * @return array
+     */
+    public function getVinculosNomes(): array
+    {
+        $vinculos = json_decode($this->attributes['vinculos'] ?? '[]', true);
+
+        return is_array($vinculos) ? array_column($vinculos, 'nomeVinculo') : [];
+    }
+
+    /**VERIFICAÇÕES */
+    /**
      * Verifica se o usuário possui determinado vínculo.
      *
      * @param string $vinculo
@@ -27,13 +125,7 @@ class User extends ShieldUser
      */
     public function hasVinculo(string $vinculo): bool
     {
-        $vinculos = json_decode($this->attributes['vinculos'] ?? '[]', true);
-
-        if (!is_array($vinculos)) {
-            return false;
-        }
-
-        $tipos = array_column($vinculos, 'tipoVinculo');
+        $tipos = $this->getTiposVinculo();
         $vinculoLower = mb_strtolower($vinculo);
 
         foreach ($tipos as $tipo) {
@@ -51,15 +143,9 @@ class User extends ShieldUser
      * @param string $unidade
      * @return bool
      */
-    public function hasUnidade(string $unidade): bool
+    public function hasUnidadeSigla(string $unidade): bool
     {
-        $vinculos = json_decode($this->attributes['vinculos'] ?? '[]', true);
-
-        if (!is_array($vinculos)) {
-            return false;
-        }
-
-        $unidades = array_column($vinculos, 'siglaUnidade');
+        $unidades = $this->getUnidadesSiglas();
         $unidadeLower = mb_strtolower($unidade);
 
         foreach ($unidades as $sigla) {
@@ -72,16 +158,14 @@ class User extends ShieldUser
     }
 
     /**
-     * Retorna todos os vínculos como array simples.
+     * Verifica se o usuário faz parte de determinada unidade (por código).
      *
-     * @return array
+     * @param string $unidade
+     * @return bool
      */
-    public function getTiposVinculo(): array
+    public function hasUnidadeCodigo(int $unidade): bool
     {
-        $vinculos = json_decode($this->attributes['vinculos'] ?? '[]', true);
-
-        return is_array($vinculos) ? array_column($vinculos, 'tipoVinculo') : [];
+        $tipos = $this->getUnidadesCodigos();
+        return in_array($unidade, $tipos, true);
     }
-
-
 }
