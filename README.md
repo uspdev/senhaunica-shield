@@ -71,6 +71,57 @@ Caso deseje customizar as Views, alterar esses campos. Lembre-se de utilizar o f
 
 O Shield permite habilitar ou não novos registros, login por URL, etc. Verificar na documentação. 
 
+# Atualização para versão 2.0.0
+A versão 2.0.0 da biblioteca traz mudanças importantes na estrutura da tabela users e na forma de manipulação dos vínculos dos usuários. Essas alterações podem causar problemas de compatibilidade em sistemas que utilizam a versão 1.2.0, especialmente em consultas, exibições e verificações que dependiam dos seguintes campos, agora removidos:
+
+* tipoVinculo
+* codigoSetor
+* nomeAbreviadoSetor
+* nomeSetor
+* codigoUnidade
+* siglaUnidade
+* nomeUnidade
+* nomeVinculo
+* nomeAbreviadoFuncao
+* tipoFuncao
+
+## Novos campos
+* **vinculos:** armazena todos os dados de vínculos do usuário em formato JSON (array)
+
+* **tipoUser**: indica a origem do usuário. 
+   * USP → usuário autenticado via Senha Única USP.
+   * EXTERNO → usuário criado localmente no sistema, sem autenticação pela USP.
+
+* **observacao**: campo livre para observações adicionais sobre o usuário.
+
+## Novos métodos auxiliares
+Para facilitar consultas e verificações sobre vínculos e unidades, foram criados métodos na User Entity. Esses métodos encapsulam a lógica de leitura do campo vinculos e permitem verificações diretas via auth()->user()->metodo().
+
+## Métodos disponíveis na User Entity
+Método   | Parâmetros | Retorno | Descrição
+--------- | ------ | --------- | ------
+getVinculos() | – | array | Retorna todos os vínculos completos em formato de array associativo.
+getTiposVinculo() | – | array | Retorna apenas os tipos de vínculo (ex.: ['SERVIDOR','ALUNO']).
+getCodigosSetores() | – | array | Retorna todos os códigos de setor associados aos vínculos.
+getNomesAbreviadosSetores() | – | array | Retorna os nomes abreviados dos setores.
+getNomeSetores() | – | array | Retorna os nomes completos dos setores.
+getUnidadesCodigos() | – | array | Retorna os códigos das unidades.
+getUnidadesSiglas() | – | array | Retorna as siglas das unidades.
+getUnidadesNomes() | – | array | Retorna os nomes completos das unidades.
+getVinculosNomes() | – | array | Retorna os nomes dos vínculos (ex.: “Aluno”, “Servidor”).
+hasVinculo($vinculo) | string $vinculo | bool | Verifica se o usuário possui determinado vínculo (case-insensitive).
+hasUnidadeSigla($unidade) | string $unidade | bool | Verifica se o usuário pertence a uma unidade pela sigla.
+hasUnidadeCodigo($unidade) | int $unidade | bool | Verifica se o usuário pertence a uma unidade pelo código (case-insensitive).
+
+## Observações importantes
+1. Sistemas que dependiam dos campos removidos devem ser adaptados para usar os novos métodos.
+
+2. Após atualizar para a versão 2.0.0, é necessário rodar as migrations do pacote:
+
+```
+php spark migrate --all
+```
+
 ## Workflow
 
 Ao realizar a autenticação no servidor oAuth USP, a biblioteca verifica se já existe na tabela de usuários do Codeigniter Shield o número USP do usuário. Em caso afirmativo, faz o logon. Caso contrário, cria o usuário na tabela, atribui ao grupo default e, por fim, faz o logon. 
@@ -173,7 +224,3 @@ $routes->group('reports', ['filter' => 'permission:view-reports'], function ($ro
 });
 ```
 Apenas usuários com a permissão view-reports poderão acessar
-
-
-
-
