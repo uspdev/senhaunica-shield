@@ -5,7 +5,7 @@ namespace Uspdev\SenhaunicaShield\Database\Migrations;
 use CodeIgniter\Database\Forge;
 use CodeIgniter\Database\Migration;
 
-class AddVinculo extends Migration
+class AddVinculosCampoUnico extends Migration
 {
     public function __construct(?Forge $forge = null)
     {
