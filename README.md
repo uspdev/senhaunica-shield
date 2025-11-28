@@ -109,9 +109,12 @@ getUnidadesCodigos() | – | array | Retorna os códigos das unidades.
 getUnidadesSiglas() | – | array | Retorna as siglas das unidades.
 getUnidadesNomes() | – | array | Retorna os nomes completos das unidades.
 getVinculosNomes() | – | array | Retorna os nomes dos vínculos (ex.: “Aluno”, “Servidor”).
+getNomesAbreviadosFuncao() | – | array | Retorna os nomes abreviados da função do usuário
+getTipoFuncao() | – | array | Retorna os tipos de função do usuário
 hasVinculo($vinculo) | string $vinculo | bool | Verifica se o usuário possui determinado vínculo (case-insensitive).
-hasUnidadeSigla($unidade) | string $unidade | bool | Verifica se o usuário pertence a uma unidade pela sigla.
-hasUnidadeCodigo($unidade) | int $unidade | bool | Verifica se o usuário pertence a uma unidade pelo código (case-insensitive).
+hasUnidadeSigla($unidade) | string $unidade | bool | Verifica se o usuário pertence a uma unidade pela sigla (case-insensitive).
+hasUnidadeCodigo($unidade) | int $unidade | bool | Verifica se o usuário pertence a uma unidade pelo código.
+hasFuncao($funcao) | string $funcao | bool | Verifica se o usuário possui determinada função (case-insensitive). OBS: Alguns docentes possuem tipoVinculo 'SERVIIDOR' e tipoFuncao 'docente'.
 
 ## Observações importantes
 1. Sistemas que dependiam dos campos removidos devem ser adaptados para usar os novos métodos.
