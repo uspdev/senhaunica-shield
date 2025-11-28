@@ -116,6 +116,30 @@ class User extends ShieldUser
         return is_array($vinculos) ? array_column($vinculos, 'nomeVinculo') : [];
     }
 
+    /**
+     * Retorna todos os nomes dos Nomes Abreviados de função como array simples.
+     *
+     * @return array
+     */
+    public function getNomesAbreviadosFuncao(): array
+    {
+        $nomeAbreviadoFuncao = json_decode($this->attributes['vinculos'] ?? '[]', true);
+
+        return is_array($nomeAbreviadoFuncao) ? array_column($nomeAbreviadoFuncao, 'nomeAbreviadoFuncao') : [];
+    }
+
+    /**
+     * Retorna todos os Tipos de Função como array simples.
+     *
+     * @return array
+     */
+    public function getTipoFuncao(): array
+    {
+        $tipoFuncao = json_decode($this->attributes['vinculos'] ?? '[]', true);
+
+        return is_array($tipoFuncao) ? array_column($tipoFuncao, 'tipoFuncao') : [];
+    }
+
     /**VERIFICAÇÕES */
     /**
      * Verifica se o usuário possui determinado vínculo.
@@ -167,5 +191,26 @@ class User extends ShieldUser
     {
         $tipos = $this->getUnidadesCodigos();
         return in_array($unidade, $tipos, true);
+    }
+
+    /**
+     * Verifica se o usuário possui determinada função
+     * OBS: Docentes possuem tipoVinculo "SERVIDOR" e tipoFuncao "Docente"
+     *
+     * @param string $unidade
+     * @return bool
+     */
+    public function hasFuncao(string $funcao): bool
+    {
+        $funcoes = $this->getTipoFuncao();
+        $funcaoLower = mb_strtolower($funcao);
+
+        foreach ($funcoes as $fn) {
+            if (mb_strtolower((string)$fn) === $funcaoLower) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
