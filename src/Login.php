@@ -61,6 +61,7 @@ class Login
         $map = [
             'email' => $details['emailPrincipalUsuario'],
             'fullname' => $details['nomeUsuario'],
+            'tipoUser' => 'USP',
             'vinculos' => json_encode($details['vinculo'])
         ];
 
