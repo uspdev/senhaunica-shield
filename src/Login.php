@@ -13,7 +13,9 @@ class Login
         $authConfig = config('Auth');
 
         if (!$user) {
-            if ($authConfig->allowRegistration) {
+            $superadmins = array_map('trim', explode(',', getenv('auth.superadmin') ?? ''));
+            // Só permite registro de novo usuário se habilitado no sistema OU se usuário foi definido como superadmin no .env
+            if ($authConfig->allowRegistration || in_array($userDetails['loginUsuario'], $superadmins)) {
                 $user = self::registerUser($users, $userDetails);
                 self::assignGroup($users, $user, $userDetails['loginUsuario']);
             } else {

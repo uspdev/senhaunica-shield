@@ -71,6 +71,8 @@ Caso deseje customizar as Views, alterar esses campos. Lembre-se de utilizar o f
 
 O Shield permite habilitar ou não novos registros, login por URL, etc. Verificar na documentação. 
 
+No caso do auth.allowRegistration, se definido como false, o sistema não permitirá a criação automática de usuário, mesmo com senha única USP, a não ser dos usuários definidos como superadmin em auth.superadmin. Essa diretiva é útil para sistemas em que apenas um número restrito de usuários deve acessá-los. Pode-se criar um painel administrativo para inserção manual dos usuários, definindo-se o número USP como username. Dessa forma, ao tentar logar, o sistema reconhecerá o usuário como cadastrado e automaticamente atualizará seus dados pessoais como fullname e vinculos.
+
 # Atualização para versão 2.0.0
 A versão 2.0.0 da biblioteca traz mudanças importantes na estrutura da tabela users e na forma de manipulação dos vínculos dos usuários. Essas alterações podem causar problemas de compatibilidade em sistemas que utilizam a versão 1.2.0, especialmente em consultas, exibições e verificações que dependiam dos seguintes campos, agora removidos:
 
