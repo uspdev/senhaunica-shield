@@ -41,6 +41,8 @@ class Login
         ]);
 
         $users->save($user);
+        $registeredUser = $users->findById($users->getInsertID());
+        $registeredUser->activate();
         return $users->findById($users->getInsertID());
     }
 
