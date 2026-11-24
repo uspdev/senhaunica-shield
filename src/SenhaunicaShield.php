@@ -33,7 +33,7 @@ class SenhaunicaShield
             if (isset($_GET['oauth_token']) && isset($_GET['oauth_verifier'])) {
                 // Previne erro de item de sessão nulo, recriando caso não encontrado
                 if (!$session->has('temporary_credentials')) {
-                    header('Location: ' . $_SERVER['PHP_SELF']);
+                    header('Location: ' . self::caminhoRetorno());
                     exit;
                 }
                 $temporaryCredentials = unserialize($session->get('temporary_credentials'));
@@ -45,7 +45,7 @@ class SenhaunicaShield
                 $session->set('oauth_user', $server->getUserDetails($tokenCredentials));
 
                 // Redirecionamento após autenticação
-                header('Location: ' . $_SERVER['PHP_SELF']);
+                header('Location: ' . self::caminhoRetorno());
                 exit;
             }
 
@@ -58,6 +58,33 @@ class SenhaunicaShield
             header('Location: ' . $url);
             exit;
         }
+    }
+
+    /**
+     * Caminho de retorno após o OAuth, sem query string.
+     * Mantém a pasta quando o pedido já a traz (RewriteBase) e repõe
+     * o prefixo do baseURL quando o proxy o removeu antes do container.
+     */
+    private static function caminhoRetorno(): string
+    {
+        $caminho = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH);
+        $caminho = ($caminho === null || $caminho === '') ? '/' : $caminho;
+
+        $base = rtrim((string) config('App')->baseURL, '/');
+        $prefixo = parse_url($base . '/', PHP_URL_PATH) ?: '/';
+        $prefixo = rtrim($prefixo, '/');
+
+        if ($prefixo !== '' && $prefixo !== '/') {
+            $comparacao = rtrim($caminho, '/') ?: '/';
+            $temPrefixo = $comparacao === $prefixo
+                || str_starts_with($comparacao, $prefixo . '/');
+
+            if (! $temPrefixo) {
+                $caminho = $prefixo . '/' . ltrim($caminho, '/');
+            }
+        }
+
+        return $caminho;
     }
 
     public static function getUserDetail()
