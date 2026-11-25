@@ -18,6 +18,8 @@ class SenhaunicaShield
                 $clientCredentials['identifier'] = getenv('SENHAUNICA_KEY');
                 $clientCredentials['secret'] = getenv('SENHAUNICA_SECRET');
                 $clientCredentials['callback_id'] = getenv('SENHAUNICA_CALLBACK_ID');
+                // evita erro de callback_uri não definido
+                $clientCredentials['callback_uri'] = '';
             }
 
             $server = new ServerUSP($clientCredentials);
