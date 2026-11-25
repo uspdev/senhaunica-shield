@@ -59,7 +59,7 @@ class Login
     private static function updateUserIfNeeded($users, $user, $details)
     {
         // Não atualiza o usuário se estiver em ambiente de desenvolvimento.
-        if (defined('CI_ENVIRONMENT') && CI_ENVIRONMENT === 'development') {
+        if (defined('ENVIRONMENT') && ENVIRONMENT === 'development') {
             return $user;
         }
 
